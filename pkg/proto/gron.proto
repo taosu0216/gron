@@ -5,7 +5,7 @@ package gron;
 option go_package = "../pb;pb";
 
 
-service XTimer {
+service Gron {
   rpc CreateTimer (CreateTimerRequest) returns (CreateTimerReply){
     option (google.api.http) = {
       post: "/gron/create_timer",

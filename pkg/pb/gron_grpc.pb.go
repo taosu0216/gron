@@ -19,128 +19,128 @@ import (
 const _ = grpc.SupportPackageIsVersion8
 
 const (
-	XTimer_CreateTimer_FullMethodName = "/gron.XTimer/CreateTimer"
-	XTimer_EnableTimer_FullMethodName = "/gron.XTimer/EnableTimer"
+	Gron_CreateTimer_FullMethodName = "/gron.Gron/CreateTimer"
+	Gron_EnableTimer_FullMethodName = "/gron.Gron/EnableTimer"
 )
 
-// XTimerClient is the client API for XTimer service.
+// GronClient is the client API for Gron service.
 //
 // For semantics around ctx use and closing/ending streaming RPCs, please refer to https://pkg.go.dev/google.golang.org/grpc/?tab=doc#ClientConn.NewStream.
-type XTimerClient interface {
+type GronClient interface {
 	CreateTimer(ctx context.Context, in *CreateTimerRequest, opts ...grpc.CallOption) (*CreateTimerReply, error)
 	EnableTimer(ctx context.Context, in *EnableTimerRequest, opts ...grpc.CallOption) (*EnableTimerReply, error)
 }
 
-type xTimerClient struct {
+type gronClient struct {
 	cc grpc.ClientConnInterface
 }
 
-func NewXTimerClient(cc grpc.ClientConnInterface) XTimerClient {
-	return &xTimerClient{cc}
+func NewGronClient(cc grpc.ClientConnInterface) GronClient {
+	return &gronClient{cc}
 }
 
-func (c *xTimerClient) CreateTimer(ctx context.Context, in *CreateTimerRequest, opts ...grpc.CallOption) (*CreateTimerReply, error) {
+func (c *gronClient) CreateTimer(ctx context.Context, in *CreateTimerRequest, opts ...grpc.CallOption) (*CreateTimerReply, error) {
 	cOpts := append([]grpc.CallOption{grpc.StaticMethod()}, opts...)
 	out := new(CreateTimerReply)
-	err := c.cc.Invoke(ctx, XTimer_CreateTimer_FullMethodName, in, out, cOpts...)
+	err := c.cc.Invoke(ctx, Gron_CreateTimer_FullMethodName, in, out, cOpts...)
 	if err != nil {
 		return nil, err
 	}
 	return out, nil
 }
 
-func (c *xTimerClient) EnableTimer(ctx context.Context, in *EnableTimerRequest, opts ...grpc.CallOption) (*EnableTimerReply, error) {
+func (c *gronClient) EnableTimer(ctx context.Context, in *EnableTimerRequest, opts ...grpc.CallOption) (*EnableTimerReply, error) {
 	cOpts := append([]grpc.CallOption{grpc.StaticMethod()}, opts...)
 	out := new(EnableTimerReply)
-	err := c.cc.Invoke(ctx, XTimer_EnableTimer_FullMethodName, in, out, cOpts...)
+	err := c.cc.Invoke(ctx, Gron_EnableTimer_FullMethodName, in, out, cOpts...)
 	if err != nil {
 		return nil, err
 	}
 	return out, nil
 }
 
-// XTimerServer is the server API for XTimer service.
-// All implementations must embed UnimplementedXTimerServer
+// GronServer is the server API for Gron service.
+// All implementations must embed UnimplementedGronServer
 // for forward compatibility
-type XTimerServer interface {
+type GronServer interface {
 	CreateTimer(context.Context, *CreateTimerRequest) (*CreateTimerReply, error)
 	EnableTimer(context.Context, *EnableTimerRequest) (*EnableTimerReply, error)
-	mustEmbedUnimplementedXTimerServer()
+	mustEmbedUnimplementedGronServer()
 }
 
-// UnimplementedXTimerServer must be embedded to have forward compatible implementations.
-type UnimplementedXTimerServer struct {
+// UnimplementedGronServer must be embedded to have forward compatible implementations.
+type UnimplementedGronServer struct {
 }
 
-func (UnimplementedXTimerServer) CreateTimer(context.Context, *CreateTimerRequest) (*CreateTimerReply, error) {
+func (UnimplementedGronServer) CreateTimer(context.Context, *CreateTimerRequest) (*CreateTimerReply, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method CreateTimer not implemented")
 }
-func (UnimplementedXTimerServer) EnableTimer(context.Context, *EnableTimerRequest) (*EnableTimerReply, error) {
+func (UnimplementedGronServer) EnableTimer(context.Context, *EnableTimerRequest) (*EnableTimerReply, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method EnableTimer not implemented")
 }
-func (UnimplementedXTimerServer) mustEmbedUnimplementedXTimerServer() {}
+func (UnimplementedGronServer) mustEmbedUnimplementedGronServer() {}
 
-// UnsafeXTimerServer may be embedded to opt out of forward compatibility for this service.
-// Use of this interface is not recommended, as added methods to XTimerServer will
+// UnsafeGronServer may be embedded to opt out of forward compatibility for this service.
+// Use of this interface is not recommended, as added methods to GronServer will
 // result in compilation errors.
-type UnsafeXTimerServer interface {
-	mustEmbedUnimplementedXTimerServer()
+type UnsafeGronServer interface {
+	mustEmbedUnimplementedGronServer()
 }
 
-func RegisterXTimerServer(s grpc.ServiceRegistrar, srv XTimerServer) {
-	s.RegisterService(&XTimer_ServiceDesc, srv)
+func RegisterGronServer(s grpc.ServiceRegistrar, srv GronServer) {
+	s.RegisterService(&Gron_ServiceDesc, srv)
 }
 
-func _XTimer_CreateTimer_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+func _Gron_CreateTimer_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
 	in := new(CreateTimerRequest)
 	if err := dec(in); err != nil {
 		return nil, err
 	}
 	if interceptor == nil {
-		return srv.(XTimerServer).CreateTimer(ctx, in)
+		return srv.(GronServer).CreateTimer(ctx, in)
 	}
 	info := &grpc.UnaryServerInfo{
 		Server:     srv,
-		FullMethod: XTimer_CreateTimer_FullMethodName,
+		FullMethod: Gron_CreateTimer_FullMethodName,
 	}
 	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
-		return srv.(XTimerServer).CreateTimer(ctx, req.(*CreateTimerRequest))
+		return srv.(GronServer).CreateTimer(ctx, req.(*CreateTimerRequest))
 	}
 	return interceptor(ctx, in, info, handler)
 }
 
-func _XTimer_EnableTimer_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+func _Gron_EnableTimer_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
 	in := new(EnableTimerRequest)
 	if err := dec(in); err != nil {
 		return nil, err
 	}
 	if interceptor == nil {
-		return srv.(XTimerServer).EnableTimer(ctx, in)
+		return srv.(GronServer).EnableTimer(ctx, in)
 	}
 	info := &grpc.UnaryServerInfo{
 		Server:     srv,
-		FullMethod: XTimer_EnableTimer_FullMethodName,
+		FullMethod: Gron_EnableTimer_FullMethodName,
 	}
 	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
-		return srv.(XTimerServer).EnableTimer(ctx, req.(*EnableTimerRequest))
+		return srv.(GronServer).EnableTimer(ctx, req.(*EnableTimerRequest))
 	}
 	return interceptor(ctx, in, info, handler)
 }
 
-// XTimer_ServiceDesc is the grpc.ServiceDesc for XTimer service.
+// Gron_ServiceDesc is the grpc.ServiceDesc for Gron service.
 // It's only intended for direct use with grpc.RegisterService,
 // and not to be introspected or modified (even as a copy)
-var XTimer_ServiceDesc = grpc.ServiceDesc{
-	ServiceName: "gron.XTimer",
-	HandlerType: (*XTimerServer)(nil),
+var Gron_ServiceDesc = grpc.ServiceDesc{
+	ServiceName: "gron.Gron",
+	HandlerType: (*GronServer)(nil),
 	Methods: []grpc.MethodDesc{
 		{
 			MethodName: "CreateTimer",
-			Handler:    _XTimer_CreateTimer_Handler,
+			Handler:    _Gron_CreateTimer_Handler,
 		},
 		{
 			MethodName: "EnableTimer",
-			Handler:    _XTimer_EnableTimer_Handler,
+			Handler:    _Gron_EnableTimer_Handler,
 		},
 	},
 	Streams:  []grpc.StreamDesc{},

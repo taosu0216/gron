@@ -29,5 +29,5 @@ push:
 
 .PHONY: proto
 proto:
-	cd pkg/proto && protoc --go-grpc_out=. --go_out=. gron.proto
+	cd pkg/proto && protoc --go-grpc_out=. --go_out=. --openapi_out=../../ gron.proto
 
