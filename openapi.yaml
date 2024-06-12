@@ -23,7 +23,7 @@ paths:
                     content:
                         application/json:
                             schema:
-                                $ref: '#/components/schemas/CreateTimerReply'
+                                $ref: '#/components/schemas/CreateTimerResp'
                 default:
                     description: Default error response
                     content:
@@ -47,7 +47,7 @@ paths:
                     content:
                         application/json:
                             schema:
-                                $ref: '#/components/schemas/EnableTimerReply'
+                                $ref: '#/components/schemas/EnableTimerResp'
                 default:
                     description: Default error response
                     content:
@@ -56,21 +56,6 @@ paths:
                                 $ref: '#/components/schemas/Status'
 components:
     schemas:
-        CreateTimerReply:
-            type: object
-            properties:
-                code:
-                    type: integer
-                    format: int32
-                message:
-                    type: string
-                data:
-                    $ref: '#/components/schemas/CreateTimerReplyData'
-        CreateTimerReplyData:
-            type: object
-            properties:
-                timerId:
-                    type: string
         CreateTimerRequest:
             type: object
             properties:
@@ -85,7 +70,7 @@ components:
                     type: string
                 notifyHTTPParam:
                     $ref: '#/components/schemas/NotifyHTTPParam'
-        EnableTimerReply:
+        CreateTimerResp:
             type: object
             properties:
                 code:
@@ -93,12 +78,27 @@ components:
                     format: int32
                 message:
                     type: string
+                data:
+                    $ref: '#/components/schemas/CreateTimerRespData'
+        CreateTimerRespData:
+            type: object
+            properties:
+                timerId:
+                    type: string
         EnableTimerRequest:
             type: object
             properties:
                 app:
                     type: string
                 timerId:
+                    type: string
+        EnableTimerResp:
+            type: object
+            properties:
+                code:
+                    type: integer
+                    format: int32
+                message:
                     type: string
         GoogleProtobufAny:
             type: object

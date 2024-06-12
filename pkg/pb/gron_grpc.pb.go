@@ -27,8 +27,8 @@ const (
 //
 // For semantics around ctx use and closing/ending streaming RPCs, please refer to https://pkg.go.dev/google.golang.org/grpc/?tab=doc#ClientConn.NewStream.
 type GronClient interface {
-	CreateTimer(ctx context.Context, in *CreateTimerRequest, opts ...grpc.CallOption) (*CreateTimerReply, error)
-	EnableTimer(ctx context.Context, in *EnableTimerRequest, opts ...grpc.CallOption) (*EnableTimerReply, error)
+	CreateTimer(ctx context.Context, in *CreateTimerRequest, opts ...grpc.CallOption) (*CreateTimerResp, error)
+	EnableTimer(ctx context.Context, in *EnableTimerRequest, opts ...grpc.CallOption) (*EnableTimerResp, error)
 }
 
 type gronClient struct {
@@ -39,9 +39,9 @@ func NewGronClient(cc grpc.ClientConnInterface) GronClient {
 	return &gronClient{cc}
 }
 
-func (c *gronClient) CreateTimer(ctx context.Context, in *CreateTimerRequest, opts ...grpc.CallOption) (*CreateTimerReply, error) {
+func (c *gronClient) CreateTimer(ctx context.Context, in *CreateTimerRequest, opts ...grpc.CallOption) (*CreateTimerResp, error) {
 	cOpts := append([]grpc.CallOption{grpc.StaticMethod()}, opts...)
-	out := new(CreateTimerReply)
+	out := new(CreateTimerResp)
 	err := c.cc.Invoke(ctx, Gron_CreateTimer_FullMethodName, in, out, cOpts...)
 	if err != nil {
 		return nil, err
@@ -49,9 +49,9 @@ func (c *gronClient) CreateTimer(ctx context.Context, in *CreateTimerRequest, op
 	return out, nil
 }
 
-func (c *gronClient) EnableTimer(ctx context.Context, in *EnableTimerRequest, opts ...grpc.CallOption) (*EnableTimerReply, error) {
+func (c *gronClient) EnableTimer(ctx context.Context, in *EnableTimerRequest, opts ...grpc.CallOption) (*EnableTimerResp, error) {
 	cOpts := append([]grpc.CallOption{grpc.StaticMethod()}, opts...)
-	out := new(EnableTimerReply)
+	out := new(EnableTimerResp)
 	err := c.cc.Invoke(ctx, Gron_EnableTimer_FullMethodName, in, out, cOpts...)
 	if err != nil {
 		return nil, err
@@ -63,8 +63,8 @@ func (c *gronClient) EnableTimer(ctx context.Context, in *EnableTimerRequest, op
 // All implementations must embed UnimplementedGronServer
 // for forward compatibility
 type GronServer interface {
-	CreateTimer(context.Context, *CreateTimerRequest) (*CreateTimerReply, error)
-	EnableTimer(context.Context, *EnableTimerRequest) (*EnableTimerReply, error)
+	CreateTimer(context.Context, *CreateTimerRequest) (*CreateTimerResp, error)
+	EnableTimer(context.Context, *EnableTimerRequest) (*EnableTimerResp, error)
 	mustEmbedUnimplementedGronServer()
 }
 
@@ -72,16 +72,16 @@ type GronServer interface {
 type UnimplementedGronServer struct {
 }
 
-func (UnimplementedGronServer) CreateTimer(context.Context, *CreateTimerRequest) (*CreateTimerReply, error) {
+func (UnimplementedGronServer) CreateTimer(context.Context, *CreateTimerRequest) (*CreateTimerResp, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method CreateTimer not implemented")
 }
-func (UnimplementedGronServer) EnableTimer(context.Context, *EnableTimerRequest) (*EnableTimerReply, error) {
+func (UnimplementedGronServer) EnableTimer(context.Context, *EnableTimerRequest) (*EnableTimerResp, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method EnableTimer not implemented")
 }
 func (UnimplementedGronServer) mustEmbedUnimplementedGronServer() {}
 
 // UnsafeGronServer may be embedded to opt out of forward compatibility for this service.
-// Use of this interface is not recommended, as added methods to GronServer will
+// Use of this interfaces is not recommended, as added methods to GronServer will
 // result in compilation errors.
 type UnsafeGronServer interface {
 	mustEmbedUnimplementedGronServer()

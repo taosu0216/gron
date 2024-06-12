@@ -6,13 +6,13 @@ option go_package = "../pb;pb";
 
 
 service Gron {
-  rpc CreateTimer (CreateTimerRequest) returns (CreateTimerReply){
+  rpc CreateTimer (CreateTimerRequest) returns (CreateTimerResp){
     option (google.api.http) = {
       post: "/gron/create_timer",
       body: "*"
     };
   };
-  rpc EnableTimer (EnableTimerRequest) returns (EnableTimerReply){
+  rpc EnableTimer (EnableTimerRequest) returns (EnableTimerResp){
     option (google.api.http) = {
       post: "/gron/enable_timer",
       body: "*"
@@ -35,13 +35,13 @@ message NotifyHTTPParam{
   string body = 4;
 }
 
-message CreateTimerReply {
+message CreateTimerResp {
   int32 code = 1;
   string message = 2;
-  CreateTimerReplyData data =3;
+  CreateTimerRespData data =3;
 }
 
-message CreateTimerReplyData {
+message CreateTimerRespData {
   int64 timerId = 1;
 }
 
@@ -50,7 +50,7 @@ message EnableTimerRequest{
   int64  timerId = 2;
 }
 
-message EnableTimerReply {
+message EnableTimerResp {
   int32 code = 1;
   string message = 2;
 }

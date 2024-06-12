@@ -1,20 +1,17 @@
 package server
 
 import (
-	v1 "gron/api/helloworld/v1"
-	"gron/internal/conf"
-	"gron/internal/service"
-
-	"github.com/go-kratos/kratos/v2/log"
-	"github.com/go-kratos/kratos/v2/middleware/recovery"
 	"github.com/go-kratos/kratos/v2/transport/http"
+	"gron/internal/conf"
+	"gron/internal/interfaces"
 )
 
-// NewHTTPServer new an HTTP server.
-func NewHTTPServer(c *conf.Server, greeter *service.GreeterService, logger log.Logger) *http.Server {
+func NewHTTPServer(c *conf.Server, h *interfaces.Handler) *http.Server {
 	var opts = []http.ServerOption{
 		http.Middleware(
-			recovery.Recovery(),
+		//recovery.Recovery(),
+		//MiddlewareTraceID(),
+		//MiddlewareLog(),
 		),
 	}
 	if c.Http.Network != "" {
@@ -27,6 +24,27 @@ func NewHTTPServer(c *conf.Server, greeter *service.GreeterService, logger log.L
 		opts = append(opts, http.Timeout(c.Http.Timeout.AsDuration()))
 	}
 	srv := http.NewServer(opts...)
-	v1.RegisterGreeterHTTPServer(srv, greeter)
+	srv.HandlePrefix("/", interfaces.NewRouter(h))
 	return srv
 }
+
+// NewHTTPServer new an HTTP server.
+//func NewHTTPServer(c *conf.Server, greeter *service.GreeterService, logger log.Logger) *http.Server {
+//	var opts = []http.ServerOption{
+//		http.Middleware(
+//			recovery.Recovery(),
+//		),
+//	}
+//	if c.Http.Network != "" {
+//		opts = append(opts, http.Network(c.Http.Network))
+//	}
+//	if c.Http.Addr != "" {
+//		opts = append(opts, http.Address(c.Http.Addr))
+//	}
+//	if c.Http.Timeout != nil {
+//		opts = append(opts, http.Timeout(c.Http.Timeout.AsDuration()))
+//	}
+//	srv := http.NewServer(opts...)
+//	//v1.RegisterGronServer(srv, greeter)
+//	return srv
+//}
