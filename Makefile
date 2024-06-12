@@ -34,3 +34,7 @@ proto:
 .PHONY: wire
 wire:
 	go generate ./...
+
+.PHONY: run
+run:
+	cd cmd/gron && go run main.go
