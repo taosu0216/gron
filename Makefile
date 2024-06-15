@@ -38,3 +38,7 @@ wire:
 .PHONY: run
 run:
 	cd cmd/gron && go run main.go
+
+.PHONY: conf
+conf:
+	cd internal/conf && protoc --go_out=. conf.proto
