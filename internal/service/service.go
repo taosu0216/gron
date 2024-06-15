@@ -8,6 +8,6 @@ import (
 // ProviderSet is service providers.
 var ProviderSet = wire.NewSet(NewXTimerService)
 
-func NewXTimerService(timerUC *biz.GronUseCase) *GronService {
-	return &GronService{timerUC: timerUC}
+func NewXTimerService(timerUC *biz.GronUseCase, migratorUC *biz.MigratorUseCase) *GronService {
+	return &GronService{timerUC: timerUC, migratorUC: migratorUC}
 }

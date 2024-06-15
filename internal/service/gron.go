@@ -9,11 +9,15 @@ import (
 
 type GronService struct {
 	pb.UnimplementedGronServer
-	timerUC *biz.GronUseCase
+	timerUC    *biz.GronUseCase
+	migratorUC *biz.MigratorUseCase
 }
 
 func (s *GronService) EnableTimer(ctx context.Context, req *pb.EnableTimerRequest) (*pb.EnableTimerResp, error) {
-	err := s.timerUC.EnableTimer(ctx, req.TimerId)
+	err := s.timerUC.EnableTimer(ctx, req.App, req.TimerId)
+	if err != nil {
+		return nil, err
+	}
 	return nil, nil
 }
 
@@ -22,7 +26,7 @@ func (s *GronService) CreateTimer(ctx context.Context, req *pb.CreateTimerReques
 	if err != nil {
 		return nil, err
 	}
-	timert, err := s.timerUC.CreateTimer(ctx, &biz.Timer{
+	timer, err := s.timerUC.CreateTimer(ctx, &biz.Timer{
 		App:             req.App,
 		Name:            req.Name,
 		Status:          int(req.Status),
@@ -36,7 +40,7 @@ func (s *GronService) CreateTimer(ctx context.Context, req *pb.CreateTimerReques
 		Code:    0,
 		Message: "ok",
 		Data: &pb.CreateTimerRespData{
-			TimerId: timert.TimerId,
+			TimerId: timer.TimerId,
 		},
 	}, nil
 }

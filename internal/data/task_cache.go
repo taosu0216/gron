@@ -17,10 +17,9 @@ func NewTaskCache(confData *conf.Data, data *Data) biz.TaskCache {
 	return task
 }
 
-func (t *TaskCache) BatchCreateTasks(ctx context.Context, tasks []*biz.TimerTask) error {
-	return nil
-}
+// TODO: data层,biz.TaskCache接口具体实现
 
+func (t *TaskCache) BatchCreateTasks(ctx context.Context, tasks []*biz.TimerTask) error { return nil }
 func (t *TaskCache) GetTasksByTime(ctx context.Context, table string, start, end int64) ([]*biz.TimerTask, error) {
 	return nil, nil
 }

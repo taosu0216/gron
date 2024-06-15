@@ -8,8 +8,6 @@ import (
 	"time"
 )
 
-const defaultEnableGapSeconds = 3
-
 type Timer struct {
 	TimerId         int64 `gorm:"column:id"`
 	App             string
@@ -26,13 +24,6 @@ func (t *Timer) TableName() string {
 	return "gron"
 }
 
-type TimerRepo interface {
-	Save(context.Context, *Timer) (*Timer, error)
-	Update(context.Context, *Timer) (*Timer, error)
-	FindByID(context.Context, int64) (*Timer, error)
-	FindByStatus(context.Context, int) ([]*Timer, error)
-	Delete(context.Context, int64) error
-}
 type GronUseCase struct {
 	confData  *conf.Data
 	timerRepo TimerRepo
@@ -54,10 +45,11 @@ func NewCreateTimerUseCase(confData *conf.Data, timerRepo TimerRepo, taskRepo Ti
 	}
 }
 
+// 实现proto文件定义的接口方法
+
 func (uc *GronUseCase) CreateTimer(ctx context.Context, g *Timer) (*Timer, error) {
 	return uc.timerRepo.Save(ctx, g)
 }
-
 func (uc *GronUseCase) EnableTimer(ctx context.Context, app string, timerId int64) error {
 	// 限制激活和去激活频次
 	//locker := lock.NewRedisLock(utils.GetEnableLockKey(app),
@@ -76,36 +68,7 @@ func (uc *GronUseCase) EnableTimer(ctx context.Context, app string, timerId int6
 	//	return nil
 	//}
 
-	// 开启事务
-	//uc.tm.InTx(ctx, func(ctx context.Context) error {
-	//	// 1. 数据库获取Timer
-	//	timer, err := uc.timerRepo.FindByID(ctx, timerId)
-	//	if err != nil {
-	//		log.ErrorContextf(ctx, "激活失败，timer不存在：timerId, err: %v", err)
-	//		return err
-	//	}
-	//
-	//	// 2. 校验状态
-	//	if timer.Status != constant.Unabled.ToInt() {
-	//		return fmt.Errorf("Timer非Unable状态，激活失败，timerId:: %d", timerId)
-	//	}
-	//
-	//	// 修改timer为激活状态
-	//	timer.Status = constant.Enabled.ToInt()
-	//	_, err = uc.timerRepo.Update(ctx, timer)
-	//	if err != nil {
-	//		log.ErrorContextf(ctx, "激活失败，timer不存在：timerId, err: %v", err)
-	//		return err
-	//	}
-	//
-	//	// 迁移数据
-	//	if err = uc.muc.MigratorTimer(ctx, timer); err != nil {
-	//		log.ErrorContextf(ctx, "迁移timer失败: %v", err)
-	//		return err
-	//	}
-	//	return nil
-	//})
-	// 开启事务
+	// 开启事务,失败就回滚
 	return uc.tm.InTx(ctx, func(ctx context.Context) error {
 		// 1.数据库获取timer
 		timer, err := uc.timerRepo.FindByID(ctx, timerId)
