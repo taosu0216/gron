@@ -24,7 +24,6 @@ func NewMigratorUseCase(confData *conf.Data, timerRepo TimerRepo, taskRepo Timer
 func (uc *MigratorUseCase) BatchMigratorTimer(ctx context.Context) error {
 	return nil
 }
-
 func (uc *MigratorUseCase) MigratorTimer(ctx context.Context, timer *Timer) error {
 	return nil
 }
