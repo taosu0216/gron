@@ -25,6 +25,7 @@ func NewDB(conf *conf.Data) *gorm.DB {
 	if err != nil {
 		panic(err)
 	}
+
 	sqlDB.SetMaxIdleConns(int(maxIdleConn))
 	sqlDB.SetMaxOpenConns(int(maxOpenConn))
 	sqlDB.SetConnMaxIdleTime(time.Duration(maxIdleTime))
