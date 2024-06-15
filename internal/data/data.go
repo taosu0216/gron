@@ -26,7 +26,7 @@ func NewData(db *gorm.DB, cache *redis.Client) *Data {
 type contextTxKey struct{}
 
 func (d *Data) InTx(ctx context.Context, fn func(ctx context.Context) error) error {
-	// Transaction start a transaction as a block, return error will rollback, otherwise to commit. Transaction executes an
+	// Transaction start a transaction as a block, return error will roll back, otherwise to commit. Transaction executes an
 	// arbitrary number of commands in fc within a transaction. On success the changes are committed; if an error occurs
 	// they are rolled back.
 	return d.db.WithContext(ctx).Transaction(func(tx *gorm.DB) error {

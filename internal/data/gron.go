@@ -25,7 +25,8 @@ func (r *gronRepo) Save(ctx context.Context, g *biz.Timer) (*biz.Timer, error) {
 }
 
 func (r *gronRepo) Update(ctx context.Context, g *biz.Timer) (*biz.Timer, error) {
-	return nil, nil
+	err := r.data.db.WithContext(ctx).Where("id = ?", g.TimerId).Updates(g).Error
+	return g, err
 }
 
 func (r *gronRepo) Delete(ctx context.Context, id int64) error {
@@ -33,7 +34,12 @@ func (r *gronRepo) Delete(ctx context.Context, id int64) error {
 }
 
 func (r *gronRepo) FindByID(ctx context.Context, timerId int64) (*biz.Timer, error) {
-	return nil, nil
+	var timer biz.Timer
+	err := r.data.db.WithContext(ctx).Where("timer_id = ?", timerId).First(&timer).Error
+	if err != nil {
+		return nil, err
+	}
+	return &timer, nil
 }
 
 func (r *gronRepo) FindByStatus(ctx context.Context, status int) ([]*biz.Timer, error) {
