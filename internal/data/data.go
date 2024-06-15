@@ -34,6 +34,7 @@ func (d *Data) InTx(ctx context.Context, fn func(ctx context.Context) error) err
 		return fn(ctx)
 	})
 }
+
 func NewTransaction(d *Data) biz.Transaction {
 	return d
 }
