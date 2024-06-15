@@ -34,7 +34,7 @@ func wireApp(confServer *conf.Server, confData *conf.Data, logger log.Logger) (*
 	transaction := data.NewTransaction(dataData)
 	migratorUseCase := biz.NewMigratorUseCase(confData, timerRepo, timerTaskRepo, taskCache)
 	gronUseCase := biz.NewCreateTimerUseCase(confData, timerRepo, timerTaskRepo, taskCache, transaction, migratorUseCase)
-	gronService := service.NewXTimerService(gronUseCase)
+	gronService := service.NewXTimerService(gronUseCase, migratorUseCase)
 	grpcServer := server.NewGRPCServer(confServer, gronService)
 	handler := interfaces.NewHandler(gronService)
 	httpServer := server.NewHTTPServer(confServer, handler)
