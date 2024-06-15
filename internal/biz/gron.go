@@ -50,6 +50,7 @@ func NewCreateTimerUseCase(confData *conf.Data, timerRepo TimerRepo, taskRepo Ti
 		taskRepo:  taskRepo,
 		taskCache: taskCache,
 		tm:        tm,
+		muc:       muc,
 	}
 }
 
