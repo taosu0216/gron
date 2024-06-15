@@ -2,6 +2,8 @@ package biz
 
 import (
 	"context"
+	"fmt"
+	"github.com/go-kratos/kratos/v2/log"
 	"gron/internal/conf"
 	"time"
 )
@@ -35,16 +37,19 @@ type GronUseCase struct {
 	confData  *conf.Data
 	timerRepo TimerRepo
 	taskRepo  TimerTaskRepo
-	//taskCache TaskCache
-	tm Transaction
-	//muc       *MigratorUseCase
+	// interface: TaskCache,Transaction
+	taskCache TaskCache
+	tm        Transaction
+	muc       *MigratorUseCase
 }
 
-func NewCreateTimerUseCase(confData *conf.Data, timerRepo TimerRepo, taskRepo TimerTaskRepo) *GronUseCase {
+func NewCreateTimerUseCase(confData *conf.Data, timerRepo TimerRepo, taskRepo TimerTaskRepo, taskCache TaskCache, tm Transaction, muc *MigratorUseCase) *GronUseCase {
 	return &GronUseCase{
 		confData:  confData,
 		timerRepo: timerRepo,
 		taskRepo:  taskRepo,
+		taskCache: taskCache,
+		tm:        tm,
 	}
 }
 
@@ -99,5 +104,31 @@ func (uc *GronUseCase) EnableTimer(ctx context.Context, app string, timerId int6
 	//	}
 	//	return nil
 	//})
-	return nil
+	// 开启事务
+	return uc.tm.InTx(ctx, func(ctx context.Context) error {
+		// 1.数据库获取timer
+		timer, err := uc.timerRepo.FindByID(ctx, timerId)
+		if err != nil {
+			log.Error("激活失败，timer不存在：timerId, err: %v", err)
+			return err
+		}
+
+		// 2.校验状态
+		if timer.Status != 1 {
+			return fmt.Errorf("Timer非Unable状态，激活失败，timerId:: %d", timerId)
+		}
+		timer.Status = 2
+		_, err = uc.timerRepo.Update(ctx, timer)
+		if err != nil {
+			log.Error("激活失败，timer不存在：timerId, err: %v", err)
+			return err
+		}
+
+		// 迁移数据
+		if err = uc.muc.MigratorTimer(ctx, timer); err != nil {
+			log.Error("迁移timer失败: %v", err)
+			return err
+		}
+		return nil
+	})
 }
