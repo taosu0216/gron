@@ -45,6 +45,20 @@ func NewCreateTimerUseCase(confData *conf.Data, timerRepo TimerRepo, taskRepo Ti
 	}
 }
 
+// TODO: 为什么要在这里定义这个方法？
+func (t *Timer) BatchTasksFromTimer(executeTimes []time.Time) []*TimerTask {
+	tasks := make([]*TimerTask, 0, len(executeTimes))
+	for _, executeTime := range executeTimes {
+		tasks = append(tasks, &TimerTask{
+			App:      t.App,
+			TimerID:  t.TimerId,
+			Status:   0,
+			RunTimer: executeTime.UnixMilli(),
+		})
+	}
+	return tasks
+}
+
 // 实现proto文件定义的接口方法
 
 func (uc *GronUseCase) CreateTimer(ctx context.Context, g *Timer) (*Timer, error) {
