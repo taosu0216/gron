@@ -102,7 +102,7 @@ func (uc *GronUseCase) EnableTimer(ctx context.Context, app string, timerId int6
 			return err
 		}
 
-		//TODO: 6.211
+		//TODO: 6.21
 		// 迁移数据
 		if err = uc.muc.MigratorTimer(ctx, timer); err != nil {
 			log.Error("迁移timer失败: %v", err)
